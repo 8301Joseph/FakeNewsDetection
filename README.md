@@ -11,6 +11,36 @@ Project Description:
 Train a model to detect whether a given sentence or tweet is fake news or not.
 Potential to expand the scope toward a research focus (improving state-of-the-art).
 
+## Getting Started
+
+### 1) Clone the repository (skip if already cloned)
+```bash
+git clone REPLACE_WITH_YOUR_REPO_URL
+cd FakeNewsDetection
+```
+
+### 2) Create and activate the Conda environment
+- The environment name is `fake-news-env` (from `environment.yml`).
+```bash
+conda env create -f environment.yml
+conda activate fake-news-env
+```
+
+If the environment already exists, just activate it:
+```bash
+conda activate fake-news-env
+```
+
+To update dependencies later:
+```bash
+conda env update -f environment.yml --prune
+```
+
+To leave the environment:
+```bash
+conda deactivate
+```
+
 ------------------------------------------------------------
 Milestone / Sprint 1: Setup, Data Curation, and EDA
 ------------------------------------------------------------
