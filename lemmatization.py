@@ -1,41 +1,21 @@
-import re
-import nltk
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
+import pandas as pd
 from nltk.stem import WordNetLemmatizer
+import nltk
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
+from nltk.stem import PorterStemmer
+import re
 from string import punctuation
 
-# one-time setup
-nltk.download('punkt')
-nltk.download('stopwords')
 nltk.download('wordnet')
+path = "WELFake_Dataset.csv"
 
-stop = set(stopwords.words('english')) - {"no", "not", "nor", "n't"}
-wnl = WordNetLemmatizer()
 
-def clean_lemmatize(text):
+#df = pd.read_csv(path)
+#print(df.head())
+
+def remove_stopwords_punct(text):
     if not isinstance(text, str):
         return ""
-    
-    # lowercase + remove non-letters
-    text = text.lower()
-    text = re.sub(r'[^a-z\s]', ' ', text)
-    
-    # tokenize
-    tokens = word_tokenize(text)
-    
-    # remove stopwords + punctuation
-    tokens = [t for t in tokens if t not in stop and t not in punctuation]
-    
-    # lemmatize
-    lemmas = [wnl.lemmatize(t) for t in tokens]
-    
-    # return joined string
-    return " ".join(lemmas)
-
-
-
-sample = "The cats aren't running quickly, but they're not lazy either!"
-print(clean_lemmatize(sample))
-
-
+    tokens = re.findall(r"[A-Za-z']+", text.lower())
+    stop = (set(ENGLISH_STOP_WORDS) - {"no", "not", "nor", "n't"}) | set(punctuation)
+    return " ".join(t for t in tokens if t not in stop)
