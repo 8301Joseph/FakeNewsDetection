@@ -56,4 +56,4 @@ def process_dataset(df):
     df['Cleaned text'] = df['text'].apply(clean_lemmatize) 
     df.to_csv("lemmatized.csv")
 
-#process_dataset(df)
+process_dataset(df)
