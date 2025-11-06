@@ -17,5 +17,3 @@ def apply_s2v(path):
 
 path = "WELFake_Dataset.csv"
 sentence2vec(path)
-
-
