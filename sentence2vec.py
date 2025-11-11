@@ -1,19 +1,33 @@
-from sent2vec.vectorizer import Vectorizer
-from scipy import spatial
-import pandas as pd
-
 #https://pypi.org/project/sent2vec/
 
-def sentence2vec(sentences):
-    vectorizer = Vectorizer()
-    vectorizer.run(sentences)
-    vectors = vectorizer.vectors
-    return vectors
+import re
+import pandas as pd
+from sent2vec.vectorizer import Vectorizer
 
-def apply_s2v(path):
-    df = pd.read_csv(path)
-    df['Vectorized'] = df['text'].apply(sentence2vec) 
-    df.to_csv("sentence2vec.csv")
+SENT_COL = "Cleaned text"  # your column
 
-path = "WELFake_Dataset.csv"
-sentence2vec(path)
+def split_into_sentences(text: str):
+    if not isinstance(text, str):
+        text = "" if pd.isna(text) else str(text)
+    parts = re.split(r'(?<=[.!?])\s+', text.strip())
+    return [p.strip() for p in parts if p.strip()]
+
+def sentence_list_to_vectors(sentences):
+    if not sentences:
+        return []
+    vec = Vectorizer()
+    vec.run(sentences)
+    return [row.tolist() for row in vec.vectors]
+
+def process_lemmatized(
+    input_csv: str = "lemmatized.csv",
+    output_csv: str = "sentence2vec.csv",
+):
+    df = pd.read_csv(input_csv)
+    df["sentences"] = df[SENT_COL].apply(split_into_sentences)
+    df["sentence_vectors"] = df["sentences"].apply(sentence_list_to_vectors)
+    df.to_csv(output_csv, index=False)
+    return df
+
+if __name__ == "__main__":
+    process_lemmatized()
