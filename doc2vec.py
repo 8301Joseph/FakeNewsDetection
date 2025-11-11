@@ -6,7 +6,7 @@ df = csv_to_df("lemmatized.csv", text_columns=["Cleaned text"])
 
 documents = [TaggedDocument(words=words, tags=[str(i)]) for i, words in enumerate(df['Cleaned text_tokens'])]
 
-model = Doc2Vec(vector_size=50, min_count=2, epochs=20)  # vector_size = number of features
+model = Doc2Vec(vector_size=50, min_count=2, epochs=20, workers=1)  # vector_size = number of features
 model.build_vocab(documents)
 model.train(documents, total_examples=model.corpus_count, epochs=model.epochs)
 
