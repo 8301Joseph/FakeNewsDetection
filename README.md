@@ -19,7 +19,17 @@ git clone REPLACE_WITH_YOUR_REPO_URL
 cd FakeNewsDetection
 ```
 
-### 2) Create and activate the Conda environment
+### 2) Initialize Git LFS for this repository
+**Important**: Git LFS must be initialized in the repository before you can access large CSV files.
+
+```bash
+# Initialize Git LFS for this repository (required for accessing large CSV files)
+git lfs install
+```
+
+**Note**: If you see "Git LFS is not installed for this repository" when running `git lfs pull`, you need to run `git lfs install` first. This sets up Git LFS hooks for this specific repository.
+
+### 3) Create and activate the Conda environment
 - The environment name is `fake-news-env` (from `environment.yml`).
 ```bash
 conda env create -f environment.yml
@@ -36,10 +46,50 @@ To update dependencies later:
 conda env update -f environment.yml --prune
 ```
 
+**Important**: After creating the environment, download NLTK data:
+```bash
+# Download required NLTK data (required for lemmatization.py)
+python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('wordnet')"
+```
+
+### 4) Pull Git LFS files
+After cloning and initializing Git LFS, download the actual CSV file contents:
+
+```bash
+# Pull all Git LFS files (CSV files are stored in Git LFS)
+git lfs pull
+
+# Or pull specific files
+git lfs pull --include="lemmatized.csv"
+git lfs pull --include="WELFake_Dataset.csv"
+git lfs pull --include="*.csv"  # Pull all CSV files
+```
+
+**Troubleshooting**: 
+- If you get "Skipping object checkout, Git LFS is not installed for this repository", run `git lfs install` first
+- If files appear as small pointer files (~134 bytes), run `git lfs pull` to download the actual content
+
 To leave the environment:
 ```bash
 conda deactivate
 ```
+
+### 5) Update local files after repository changes
+
+If someone else has updated the repository and you've pulled the latest changes:
+
+```bash
+# Pull latest code changes
+git pull
+
+# Pull Git LFS files (if CSV files were updated)
+git lfs pull
+
+# Update conda environment if dependencies changed
+conda env update -f environment.yml --prune
+```
+
+**Note**: Large CSV files (`*.csv`) are stored in Git LFS to reduce repository size. After pulling changes, run `git lfs pull` to download the actual file contents. If you see files as small pointer files (~134 bytes), that means you need to run `git lfs pull` to download the real content.
 
 ## Project Files Overview
 
@@ -172,15 +222,33 @@ This section explains the purpose and contents of each file in the repository.
 - **Contents**: Complete dependency list including:
   - Python 3.12
   - Data science libraries (numpy, pandas, scikit-learn, scipy)
+  - NLP libraries (gensim, nltk)
   - Jupyter ecosystem (jupyter, jupyterlab, notebook, ipykernel)
-  - Visualization (matplotlib-inline)
+  - Visualization (matplotlib, matplotlib-inline, seaborn)
   - Web scraping (beautifulsoup4, requests)
+  - Git LFS (git-lfs) - Required for accessing large CSV files stored in Git LFS
+  - sent2vec (via pip) - Required for sentence2vec.py
 - **Usage**: `conda env create -f environment.yml`
+- **After installation**: 
+  - Run `git lfs install` in the repository directory to initialize Git LFS for this repo
+  - Run `git lfs pull` to download large CSV files
+  - Download NLTK data: `python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('wordnet')"`
 
 #### `environment_windows.yml`
 - **Purpose**: Simplified Conda environment specification for Windows
-- **Contents**: Core dependencies only (Python 3.12, numpy, pandas, scikit-learn, scipy, jupyter, etc.)
+- **Contents**: Core dependencies including:
+  - Python 3.12
+  - Data science libraries (numpy, pandas, scikit-learn, scipy)
+  - NLP libraries (gensim, nltk)
+  - Jupyter ecosystem (jupyter, jupyterlab, notebook, ipykernel)
+  - Visualization (matplotlib, matplotlib-inline, seaborn)
+  - Git LFS (git-lfs)
+  - sent2vec (via pip)
 - **Usage**: Alternative environment file for Windows users
+- **After installation**: 
+  - Run `git lfs install` in the repository directory to initialize Git LFS for this repo
+  - Run `git lfs pull` to download large CSV files
+  - Download NLTK data: `python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('wordnet')"`
 
 #### `requirements.txt`
 - **Purpose**: Python package requirements (pip format)

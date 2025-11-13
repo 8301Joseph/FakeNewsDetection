@@ -12,8 +12,15 @@ dependencies:
   - jupyterlab
   - ipykernel
   - notebook
+  - matplotlib
   - matplotlib-inline
+  - seaborn
   - beautifulsoup4
   - requests
   - pip
   - pyyaml
+  - git-lfs
+  - gensim
+  - nltk
+  - pip:
+    - sent2vec
