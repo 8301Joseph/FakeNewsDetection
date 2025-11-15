@@ -10,8 +10,8 @@ from sklearn.metrics import classification_report, confusion_matrix
 # ==========================
 
 # Your data files (they can be .txt or .csv; content matters, not extension)
-TRAIN_FILE = "train_set.txt"
-TEST_FILE = "test_set.txt"
+TRAIN_FILE = "train_set.csv"
+TEST_FILE = "test_set.csv"
 
 # Column names in BOTH files (based on your pasted content)
 EMB_COLUMN = "doc2vec"   # this is the vector column
