@@ -13,7 +13,9 @@ test_df = pd.read_csv("test_set.csv")
 def parse_vector(vec_str):
     vec_str = vec_str.strip().replace('\n', ' ')
     vec_str = re.sub(r'\s+', ' ', vec_str)
-    numbers = re.findall(r'[-+]?\d*\.\d+(?:[eE][-+]?\d+)?', vec_str)
+    clean = vec_str.replace('[', '').replace(']', '')
+    parts = clean.replace(',', ' ').split()
+    numbers = [float(x) for x in parts]
     return np.array([float(num) for num in numbers])
 
 train_df['doc2vec'] = train_df['doc2vec'].apply(parse_vector)
