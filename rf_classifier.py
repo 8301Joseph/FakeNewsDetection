@@ -18,4 +18,4 @@ rf_model.fit(x_train, y_train)
 x_test, y_test = split("test_set.csv", "doc2vec")
 y_pred = rf_model.predict(x_test)
 accuracy = accuracy_score(y_test, y_pred)
-print(accuracy) #0.8829278436265335 for first iter
+print(accuracy) #0.8829278436265335 for Doc2Vec
